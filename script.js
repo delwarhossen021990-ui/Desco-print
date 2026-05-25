@@ -12,7 +12,7 @@ try{
 
 const response =
 await fetch(
-"https://desco-backend.onrender.com/receipt/" + meter
+"https://desco-backend-xx3z.onrender.com/" + meter
 );
 
 const data = await response.json();
