@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>DESCO Print</title>
+<meta charset="UTF-8">
+<title>DESCO Receipt Print</title>
 
 <style>
 body{
@@ -40,12 +41,9 @@ border-radius:10px;
 
 <h2>DESCO Receipt Print</h2>
 
-<input
-id="meter"
-placeholder="Enter Meter Number"
-/>
+<input id="meter" placeholder="Enter Meter Number">
 
-<button onclick="getReceipt()">
+<button id="btn">
 Fetch Receipt
 </button>
 
@@ -53,7 +51,8 @@ Fetch Receipt
 
 <script>
 
-async function getReceipt(){
+document.getElementById("btn")
+.addEventListener("click", async ()=>{
 
 const meter =
 document.getElementById("meter").value;
@@ -65,24 +64,19 @@ result.innerHTML = "Loading...";
 
 try{
 
-const response =
-await fetch(
+const response = await fetch(
 "https://desco-backend-xx3z.onrender.com/receipt/" + meter
 );
 
-const data =
-await response.json();
+const data = await response.json();
 
 result.innerHTML = "";
 
 data.forEach(item=>{
 
-const div =
-document.createElement("div");
+result.innerHTML += `
+<div class="card">
 
-div.className = "card";
-
-div.innerHTML = `
 <h3>${item.amount} TK</h3>
 
 <p>Name: ${item.name}</p>
@@ -91,27 +85,27 @@ div.innerHTML = `
 
 <p>Token: ${item.token}</p>
 
-<button onclick='printReceipt(${JSON.stringify(item)})'>
+<button onclick='printData(${JSON.stringify(item)})'>
 Print
 </button>
-`;
 
-result.appendChild(div);
+</div>
+`;
 
 });
 
-}catch(e){
+}catch(err){
 
 result.innerHTML =
-"API Failed";
+"FAILED API";
 
-console.log(e);
-
-}
+console.log(err);
 
 }
 
-function printReceipt(item){
+});
+
+function printData(item){
 
 const text = `
 DESCO
