@@ -2,38 +2,42 @@
 <html>
 
 <head>
-  <title>DESCO Receipt Print</title>
+<title>DESCO Receipt Print</title>
 
-  <style>
-    body{
-      font-family: Arial;
-      padding:20px;
-      background:#f5f5f5;
-    }
+<style>
 
-    input{
-      width:100%;
-      padding:12px;
-      font-size:18px;
-    }
+body{
+font-family:Arial;
+padding:20px;
+background:#f5f5f5;
+}
 
-    button{
-      width:100%;
-      padding:15px;
-      margin-top:10px;
-      background:green;
-      color:white;
-      border:none;
-      font-size:18px;
-    }
+input{
+width:100%;
+padding:12px;
+font-size:18px;
+}
 
-    .card{
-      background:white;
-      padding:15px;
-      margin-top:15px;
-      border-radius:10px;
-    }
-  </style>
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+background:green;
+color:white;
+border:none;
+font-size:18px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin-top:15px;
+border-radius:10px;
+box-shadow:0 0 5px rgba(0,0,0,0.2);
+}
+
+</style>
+
 </head>
 
 <body>
@@ -55,59 +59,84 @@ Fetch Receipt
 
 async function getReceipt(){
 
-  const meter =
-  document.getElementById("meter").value;
+const meter =
+document.getElementById("meter").value;
 
-  const result =
-  document.getElementById("result");
+const result =
+document.getElementById("result");
 
-  result.innerHTML = "Loading...";
+result.innerHTML = "Loading...";
 
-  try{
+try{
 
-    const url =
-    "https://desco-backend-xx3z.onrender.com/receipt/" + meter;
+const url =
+"https://desco-backend-xx3z.onrender.com/receipt/" + meter;
 
-    const response =
-    await fetch(url);
+const response =
+await fetch(url);
 
-    const data =
-    await response.json();
+const data =
+await response.json();
 
-    console.log(data);
+console.log(data);
 
-    result.innerHTML = "";
+result.innerHTML = "";
 
-    data.forEach(item=>{
+if(data.length === 0){
 
-      result.innerHTML += `
-      <div class="card">
+result.innerHTML = "No Data Found";
 
-      <h3>${item.amount} TK</h3>
+return;
 
-      <p>Name: ${item.name}</p>
+}
 
-      <p>Meter: ${item.meter}</p>
+data.forEach(item=>{
 
-      <p>Token: ${item.token}</p>
+result.innerHTML += `
 
-      </div>
-      `;
+<div class="card">
 
-    });
+<h3>${item.amount} TK</h3>
 
-  }catch(error){
+<p>
+<b>Name:</b>
+${item.name}
+</p>
 
-    console.log(error);
+<p>
+<b>Meter:</b>
+${item.meter}
+</p>
 
-    result.innerHTML =
-    "FAILED API";
+<p>
+<b>Token:</b>
+${item.token}
+</p>
 
-  }
+<p>
+<b>Date:</b>
+${item.date}
+</p>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+console.log(error);
+
+result.innerHTML =
+"FAILED API";
+
+}
 
 }
 
 </script>
 
 </body>
+
 </html>
